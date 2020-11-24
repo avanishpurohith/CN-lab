@@ -1,44 +1,25 @@
-#include<stdio.h>
- #include<string.h>
- void main ()
- {
- char e[100][10]={"Maths","DAA","OS","MC&ES","OOC","DC","DAALAB","MCLAB","CONS"};
- int i,a[10],b[10],c[10],d[10],summ=0;
- float SGPA,sum=0.0;
- printf("Enter the marks according to the subject code: \n");
-printf("In this order\nMaths,DAA,OS,MC&ES,OOC,DC,DAALAB,MCLAB,CONS\n");
- for(i=0; i<9;i++)
- {scanf("%d",&a[i]);}
- for(i=0;i<9;i++)
-{ if(a[i]>=90) b[i]=10;
- else if(a[i]>=80) b[i]=9;
- else if(a[i]>=70) b[i]=8;
- else if(a[i]>=60) b[i]=7;
- else if(a[i]>=50) b[i]=6;
- else if(a[i]>=40) b[i]=5;
- else if(a[i]>=30) b[i]=4;
- else if(a[i]>=20) b[i]=3;
- else if(a[i]>=10) b[i]=2;
- else if(a[i]>=0) b[i]=1;
-}
-c[0]=b[0]*3;
-c[1]=b[1]*4;
-c[8]=b[8];
- for(i=2;i<6;i++)
-   c[i]=b[i]*3;
- for(i=6;i<8;i++)
-   c[i]=b[i]*2;
- for(i=0;i<9;i++)
-   summ=summ+a[i];
-   for(i=0;i<9;i++)
-   sum+=c[i];
- SGPA=(sum*10)/240;
-d[74]=3;d[72]=4;d[75]=3;d[75]=3;d[75]=3;d[75]=3;d[75]=2;d[75]=2;d[64]=1;
- printf("____________\n");
- printf("subject \tmarks   \tpoints   \tcredits   \n");
- printf("____________\n");
- for(i=0;i<9;i++)
-{ printf("%-10s \t%-10d   \t%-10d   \t%-10d   \n",e[i],a[i],b[i],d[i]); }
-printf("____________\n");
- printf("Total marks=%d \n",summ);
- printf("SGPA = %.2f \n",SGPA);}
+public class CRC16CCITT {
+
+    public static void main(String[] args) {
+        int crc = 0xFFFF;          // initial value
+        int polynomial = 0x1021;   // 0001 0000 0010 0001  (0, 5, 12)
+
+        // byte[] testBytes = "123456789".getBytes("ASCII");
+
+        byte[] bytes = args[0].getBytes();
+
+        for (byte b : bytes) {
+            for (int i = 0; i < 8; i++) {
+                boolean bit = ((b   >> (7-i) & 1) == 1);
+                boolean c15 = ((crc >> 15    & 1) == 1);
+                crc <<= 1;
+                if (c15 ^ bit) crc ^= polynomial;
+            }
+        }
+
+        crc &= 0xffff;
+        System.out.println("CRC16-CCITT = " + Integer.toHexString(crc));
+    }
+
+} 
+
