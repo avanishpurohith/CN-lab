@@ -1,44 +1,72 @@
-#include<stdio.h>
- #include<string.h>
- void main ()
- {
- char e[100][10]={"Maths","DAA","OS","MC&ES","OOC","DC","DAALAB","MCLAB","CONS"};
- int i,a[10],b[10],c[10],d[10],summ=0;
- float SGPA,sum=0.0;
- printf("Enter the marks according to the subject code: \n");
-printf("In this order\nMaths,DAA,OS,MC&ES,OOC,DC,DAALAB,MCLAB,CONS\n");
- for(i=0; i<9;i++)
- {scanf("%d",&a[i]);}
- for(i=0;i<9;i++)
-{ if(a[i]>=90) b[i]=10;
- else if(a[i]>=80) b[i]=9;
- else if(a[i]>=70) b[i]=8;
- else if(a[i]>=60) b[i]=7;
- else if(a[i]>=50) b[i]=6;
- else if(a[i]>=40) b[i]=5;
- else if(a[i]>=30) b[i]=4;
- else if(a[i]>=20) b[i]=3;
- else if(a[i]>=10) b[i]=2;
- else if(a[i]>=0) b[i]=1;
+import java.util.Scanner;
+
+public class BellmanFord {
+	private int D[];
+	private int num_ver;
+	public static final int MAX_VALUE = 999;
+
+	public BellmanFord(int num_ver) {
+		this.num_ver = num_ver;
+		D = new int[num_ver + 1];
+	}
+
+	public void BellmanFordEvaluation(int source, int A[][]) {
+		for (int node = 1; node <= num_ver; node++) {
+			D[node] = MAX_VALUE;
+
+		}
+		D[source] = 0;
+		for (int node = 1; node <= num_ver - 1; node++) {
+			for (int sn = 1; sn <= num_ver; sn++) {
+				for (int dn = 1; dn <= num_ver; dn++) {
+					if (A[sn][dn] != MAX_VALUE) {
+						if (D[dn] > D[sn] + A[sn][dn])
+							D[dn] = D[sn] + A[sn][dn];
+					}
+				}
+			}
+		}
+		for (int sn = 1; sn <= num_ver; sn++) {
+			for (int dn = 1; dn <= num_ver; dn++) {
+				if (A[sn][dn] != MAX_VALUE) {
+					if (D[dn] > D[sn] + A[sn][dn])
+						System.out.println("The Graph contains negative egde cycle");
+				}
+			}
+		}
+		for (int vertex = 1; vertex <= num_ver; vertex++) {
+			System.out.println("distance of source " + source + " to " + vertex + "is " + D[vertex]);
+		}
+	}
+
+public static void main(String[ ] args)
+{
+int num_ver = 0;
+int source;
+Scanner scanner = new Scanner(System.in);
+System.out.println("Enter the number of vertices");
+num_ver = scanner.nextInt();
+int A[][] = new int[num_ver + 1][num_ver + 1];
+System.out.println("Enter the adjacency matrix");
+for (int sn = 1; sn <= num_ver; sn++)
+{
+	for (int dn = 1; dn <= num_ver; dn++)
+	{
+
+		A[sn][dn] = scanner.nextInt();
+		if (sn == dn) {
+			A[sn][dn] = 0;
+			continue;
+		}
+		if (A[sn][dn] == 0) {
+			A[sn][dn] = MAX_VALUE;
+		}
+	}
 }
-c[0]=b[0]*3;
-c[1]=b[1]*4;
-c[8]=b[8];
- for(i=2;i<6;i++)
-   c[i]=b[i]*3;
- for(i=6;i<8;i++)
-   c[i]=b[i]*2;
- for(i=0;i<9;i++)
-   summ=summ+a[i];
-   for(i=0;i<9;i++)
-   sum+=c[i];
- SGPA=(sum*10)/240;
-d[74]=3;d[72]=4;d[75]=3;d[75]=3;d[75]=3;d[75]=3;d[75]=2;d[75]=2;d[64]=1;
- printf("____________\n");
- printf("subject \tmarks   \tpoints   \tcredits   \n");
- printf("____________\n");
- for(i=0;i<9;i++)
-{ printf("%-10s \t%-10d   \t%-10d   \t%-10d   \n",e[i],a[i],b[i],d[i]); }
-printf("____________\n");
- printf("Total marks=%d \n",summ);
- printf("SGPA = %.2f \n",SGPA);}
+System.out.println("Enter the source vertex");
+source = scanner.nextInt();
+
+BellmanFord b = new BellmanFord (num_ver);
+b.BellmanFordEvaluation(source, A);
+scanner.close();
+}}
